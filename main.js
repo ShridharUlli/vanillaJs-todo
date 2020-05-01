@@ -40,7 +40,7 @@ class Model {
         ? { id: todo.id, text: todo.text, complete: !todo.complete }
         : todo
     );
-    this._commit(todos);
+    this._commit(this.todos);
   }
 }
 
@@ -50,8 +50,8 @@ class View {
     this.app.classList.add("m-4");
 
     this.title = this.createElement("h1");
-    this.title.textContent = "Todos";
-    this.title.classList.add("text-4xl", "text-blue-500", "font-bold");
+    this.title.textContent = "📝 Todos";
+    this.title.classList.add("text-4xl", "text-blue-500", "font-bold", "mb-5");
 
     this.form = this.createElement("form");
 
@@ -59,11 +59,16 @@ class View {
     this.input.type = "text";
     this.input.placeholder = "Add Todo";
     this.input.name = "todo";
-    this.input.classList.add("bg-gray-200", "px-5", "py-3");
+    this.input.classList.add("bg-blue-100", "px-5", "py-3");
 
     this.submitButton = this.createElement("button");
     this.submitButton.textContent = "Submit";
-    this.submitButton.classList.add("bg-gray-400", "px-5", "py-3");
+    this.submitButton.classList.add(
+      "bg-blue-600",
+      "px-5",
+      "py-3",
+      "text-gray-100"
+    );
 
     this.todoList = this.createElement("ul", "todo-list");
 
@@ -96,12 +101,13 @@ class View {
     if (todos.length === 0) {
       const p = this.createElement("p");
       p.textContent = "Nothing to do, Add a task?";
+      p.classList.add("mt-5");
       this.todoList.append(p);
     } else {
       todos.forEach((todo) => {
         const li = this.createElement("li");
         li.id = todo.id;
-        li.classList.add("py-5");
+        li.classList.add("pt-2");
 
         const checkbox = this.createElement("input");
         checkbox.type = "checkbox";
@@ -111,14 +117,14 @@ class View {
         span.contentEditable = true;
         span.classList.add(
           "editable",
-          "bg-gray-100",
+          "bg-blue-100",
           "appearance-none",
           "border-2",
           "border-gray-100",
           "w-full",
           "py-2",
           "px-4",
-          "ml-4",
+          "ml-2",
           "text-gray-700",
           "leading-tight"
         );
@@ -132,7 +138,7 @@ class View {
         }
 
         const deleteButton = this.createElement("button", "delete");
-        deleteButton.textContent = "Delete";
+        deleteButton.textContent = "X";
         deleteButton.classList.add(
           "bg-red-500",
           "appearance-none",
@@ -141,7 +147,8 @@ class View {
           "py-2",
           "px-4",
           "text-gray-100",
-          "leading-tight"
+          "leading-tight",
+          "font-bold"
         );
         li.append(checkbox, span, deleteButton);
         this.todoList.append(li);
