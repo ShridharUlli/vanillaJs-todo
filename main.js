@@ -59,6 +59,7 @@ class View {
     this.input.type = "text";
     this.input.placeholder = "Add Todo";
     this.input.name = "todo";
+    this.input.maxLength = "100";
     this.input.classList.add("bg-blue-100", "px-5", "py-3");
 
     this.submitButton = this.createElement("button");
