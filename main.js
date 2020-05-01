@@ -1,14 +1,14 @@
 class Model {
   constructor() {
-    this.todos = [
-      { id: 1, text: "Run a marathon", complete: false },
-      { id: 2, text: "Plant a garden", complete: false },
-    ];
+    this.todos = JSON.parse(localStorage.getItem("todos")) || [];
   }
   bindTodoListChanged(callback) {
     this.onTodoListChanged = callback;
   }
-
+  _commit(todos) {
+    this.onTodoListChanged(todos);
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }
   addTodo(todoText) {
     const todo = {
       id: this.todos.length > 0 ? this.todos[this.todos.length - 1].id + 1 : 1,
@@ -17,7 +17,7 @@ class Model {
     };
 
     this.todos.push(todo);
-    this.onTodoListChanged(this.todos);
+    this._commit(this.todos);
   }
 
   editTodo(id, updatedText) {
@@ -31,7 +31,7 @@ class Model {
 
   deleteTodo(id) {
     this.todos = this.todos.filter((todo) => todo.id != id);
-    this.onTodoListChanged(this.todos);
+    this._commit(this.todos);
   }
 
   toggleTodo(id) {
@@ -40,7 +40,7 @@ class Model {
         ? { id: todo.id, text: todo.text, complete: !todo.complete }
         : todo
     );
-    this.onTodoListChanged(this.todos);
+    this._commit(todos);
   }
 }
 
@@ -213,15 +213,15 @@ const app = new Controller(new Model(), new View());
 // class Model {
 //   constructor() {
 //     // The state of the model, an array of todo objects, prepopulated with some data
-//     this.todos = [
-//       { id: 1, text: "Run a marathon", complete: false },
-//       { id: 2, text: "Plant a garden", complete: false },
-//     ];
+//     this.todos = JSON.parse(localStorage.getItem("todos")) || [];
 //   }
 //   bindTodoListChanged(callback) {
 //     this.onTodoListChanged = callback;
 //   }
-
+//   _commit(todos) {
+//     this.onTodoListChanged(todos);
+//     localStorage.setItem("todos", JSON.stringify(todos));
+//   }
 //   addTodo(todoText) {
 //     const todo = {
 //       id: this.todos.length > 0 ? this.todos[this.todos.length - 1].id + 1 : 1,
@@ -230,7 +230,7 @@ const app = new Controller(new Model(), new View());
 //     };
 
 //     this.todos.push(todo);
-//     this.onTodoListChanged(this.todos);
+//     this._commit(this.todos);
 //   }
 
 //   // Map through all todos, and replace the text of the todo with the specified id
@@ -245,7 +245,7 @@ const app = new Controller(new Model(), new View());
 //   // Filter a todo out of the array by id
 //   deleteTodo(id) {
 //     this.todos = this.todos.filter((todo) => todo.id !== id);
-//     this.onTodoListChanged(this.todos);
+//     this._commit(this.todos);
 //   }
 
 //   // Flip the complete boolean on the specified todo
